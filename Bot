@@ -1,0 +1,1131 @@
+import telebot
+from telebot import types
+
+answer = ''
+month = ''
+year = ''
+date = ''
+wait = ''
+ans = ''
+
+bot = telebot.TeleBot("1418591012:AAG04nXes6sUSsKYou0FhfoprDm6dHyh4u0")
+
+
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    bot.send_message(message.chat.id, """
+    Добро пожаловать!😊 
+Если вы хотите ознакомиться с ближайшим расписанием мероприятий,напишите 'Привет'.
+Памятка:
+1⃣ Пиши названия городов и месяцев с заглавной буквы.
+2⃣ На данный момент я представляю мероприятия с Ноября 2020 года до Июня 2021 года.
+3⃣ С Вами свяжется наш менеджер после совершения покупки в течение дня. """, parse_mode="Markdown")
+    bot.register_next_step_handler(message, get_text_messages)
+
+
+@bot.message_handler(commands=['help'])
+def send_welcome(message):
+    if message.text == "/help":
+        bot.send_message(message.from_user.id, "Напиши привет")
+    else:
+        bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
+
+
+@bot.message_handler(content_types=['text', 'document', 'audio'])
+def get_text_messages(message):
+    if message.text == 'Привет' or message.text == 'привет':
+        bot.send_message(message.from_user.id, "Привет! Вы хотите ознакомиться с афишей мероприятий?")
+        keyboard = telebot.types.ReplyKeyboardMarkup(True)
+        keyboard.row('Да', 'Нет')
+        bot.send_message(message.chat.id, 'Выберите опцию на клавиатуре:',
+                         reply_markup=keyboard)
+        bot.register_next_step_handler(message, reg_answer)
+    else:
+        bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
+
+
+def reg_answer(message):
+    global answer
+    answer = message.text
+    if message.text == 'Нет' or message.text == 'нет':
+        bot.reply_to(message, 'Извините, если у вас будет желание ознакомиться с афишей - пишите /start')
+    elif message.text == "/help":
+        bot.send_message(message.from_user.id, "Напиши привет")
+    elif message.text == "/start":
+        bot.send_message(message.chat.id, """
+            Добро пожаловать!😊 
+        Если вы хотите ознакомиться с ближайшим расписанием мероприятий,напишите 'Привет'.
+        Памятка:
+        1⃣ Пиши названия городов и месяцев с заглавной буквы.
+        2⃣ На данный момент я представляю мероприятия с Ноября 2020 года до Июня 2021 года.
+        3⃣ С Вами свяжется наш менеджер после совершения покупки в течение дня. """, parse_mode="Markdown")
+        bot.register_next_step_handler(message.from_user.id, get_text_messages)
+    else:
+        bot.send_message(message.from_user.id, "Афиша какого города вас интересует?")
+    bot.register_next_step_handler(message, reg_month)
+
+
+def reg_month(message):
+    global month
+    month = message.text
+    if message.text == "/help":
+        bot.send_message(message.from_user.id, "Напиши привет")
+    elif message.text == "/start":
+        bot.send_message(message.chat.id, """
+            Добро пожаловать!😊 
+        Если вы хотите ознакомиться с ближайшим расписанием мероприятий,напишите 'Привет'.
+        Памятка:
+        1⃣ Пиши названия городов и месяцев с заглавной буквы.
+        2⃣ На данный момент я представляю мероприятия с Ноября 2020 года до Июня 2021 года.
+        3⃣ С Вами свяжется наш менеджер после совершения покупки в течение дня. """, parse_mode="Markdown")
+        bot.register_next_step_handler(message.from_user.id, get_text_messages)
+    else:
+        bot.send_message(message.from_user.id, "Выберите необходимый месяц")
+    bot.register_next_step_handler(message, reg_year)
+
+
+def reg_year(message):
+    global year
+    year = message.text
+    if message.text == "/help":
+        bot.send_message(message.from_user.id, "Напиши привет")
+    elif message.text == "/start":
+        bot.send_message(message.chat.id, """
+                    Добро пожаловать!😊 
+        Если вы хотите ознакомиться с ближайшим расписанием мероприятий,напишите 'Привет'.
+        Памятка:
+        1⃣ Пиши названия городов и месяцев с заглавной буквы.
+        2⃣ На данный момент я представляю мероприятия с Ноября 2020 года до Июня 2021 года.
+        3⃣ С Вами свяжется наш менеджер после совершения покупки в течение дня. """, parse_mode="Markdown")
+        bot.register_next_step_handler(message.from_user.id, get_text_messages)
+    else:
+        bot.send_message(message.from_user.id, "Мероприятия какого года вы хотите просмотреть?")
+    bot.register_next_step_handler(message, reg_date)
+
+
+def reg_date(message):
+    global date
+    date = message.text
+    if message.text == "/help":
+        bot.send_message(message.from_user.id, "Напиши привет")
+    elif message.text == "/start":
+        bot.send_message(message.chat.id, """
+                            Добро пожаловать!😊 
+                Если вы хотите ознакомиться с ближайшим расписанием мероприятий,напишите 'Привет'.
+                Памятка:
+                1⃣ Пиши названия городов и месяцев с заглавной буквы.
+                2⃣ На данный момент я представляю мероприятия с Ноября 2020 года до Июня 2021 года.
+                3⃣ С Вами свяжется наш менеджер после совершения покупки в течение дня. """, parse_mode="Markdown")
+        bot.register_next_step_handler(message.from_user.id, get_text_messages)
+    else:
+        global wait
+        while wait == 0:
+            # noinspection PyBroadException
+            try:
+                wait = int(message.text)
+            except Exception:
+                bot.send_message(message.from_user.id, "Идет процесс обрабатывания информации.")
+        keyboard = types.InlineKeyboardMarkup()
+        key_yes = types.InlineKeyboardButton(text='Да', callback_data='yes')
+        keyboard.add(key_yes)
+        key_no = types.InlineKeyboardButton(text='Нет', callback_data='no')
+        keyboard.add(key_no)
+        question = 'Вам необходимы мероприятия ' + date + ' года. В городе ' + month + '' + '?'
+        bot.send_message(message.from_user.id, text=question, reply_markup=keyboard)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_worker(call):
+    if call.data == "yes":
+        bot.send_message(call.message.chat.id, "Подтвердите свой запрос, написав 'Да'.⬇")
+        bot.register_next_step_handler(call.message, send_welcome)
+    elif call.data == "no":
+        bot.send_message(call.message.chat.id, "Попробуем еще раз!")
+        bot.send_message(call.message.chat.id, "Привет! Вы хотите ознакомиться с афишей мероприятий?")
+        bot.register_next_step_handler(call.message, reg_answer)
+    elif call.data == 'first':
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.add(key_first)
+        key3.add(key_second)
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'second':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'third':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'forth':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'fifth':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'sixth':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'seventh':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'eight':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'nine':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'ten':
+        bot.send_message(call.message.chat.id, "Отличный выбор!")
+        key3 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='ВИП', callback_data='VIP')
+        key_second = types.InlineKeyboardButton(text='Стандарт', callback_data='stan')
+        key3.row(key_first)
+        key3.row(key_second)
+        bot.send_message(call.from_user.id, 'Выберите тип билета:', reply_markup=key3)
+    elif call.data == 'VIP':
+        key68 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='Связаться с менеджером ✅', callback_data='yees')
+        key_second = types.InlineKeyboardButton(text='Отмена ❌', callback_data='no')
+        key68.row(key_first)
+        key68.row(key_second)
+        bot.edit_message_text(
+            "Данные менеджера: Кайыров Дастан, +77777777777. "
+            "Cпасибо, что пользуетесь нашим сервисом!😊",
+            call.message.chat.id, call.message.message_id, reply_markup=key68)
+    elif call.data == 'stan':
+        key68 = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton(text='Связаться с менеджером ✅', callback_data='yees')
+        key_second = types.InlineKeyboardButton(text='Отмена ❌', callback_data='nope')
+        key68.row(key_first)
+        key68.row(key_second)
+        bot.edit_message_text(
+            "Данные менеджера: Кайыров Дастан, +77777777777. "
+            "Cпасибо, что пользуетесь нашим сервисом!😊",
+            call.message.chat.id, call.message.message_id, reply_markup=key68)
+    elif call.data == 'yees':
+        bot.send_message(call.message.chat.id, "Спасибо за выбор!☺")
+        bot.send_message(call.message.chat.id, "Если хотите еще раз посмотреть список концертов, напишите /start")
+    elif call.data == 'nope':
+        bot.send_message(call.message.chat.id, "Спасибо! Хорошего дня!🌟")
+
+
+@bot.message_handler(content_types=['text', 'document', 'audio'])
+def send_welcome(message):
+    if month == "Алматы" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+       Творческий вечер с Марселем
+       🕗Время проведения: 21 ноября - сб 19:00
+       🏢Место проведения: Ресторан "Атмосфера", Аль-Фараби 36
+       💵Цены на билеты: 5 000
+      [https://zakazbiletov.kz/media/events/rd/1605255605gwlkm.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+       Зовите меня Джордж
+       🕗Время проведения: 27 ноября - пт 17:00
+       🏢Место проведения: Государственный академический русский театр драмы им. М.Ю. Лермонтова. Пр. Абая, 43.
+       💵Цены на билеты: 6 700 - 14 700
+      [https://zakazbiletov.kz/media/events/e6/1604906727rm8zo_238x318.png](URL)""",
+                         parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+       Юди «Свет и Тьма»
+       🕗Время проведения: 21 ноября - сб 19:00
+       🏢Место проведения: г. Алматы, пр. Достык, 56, уг. пр. Абая, Дворец Республики
+       👤Возрастное ограничение: 12+
+      [https://ticketon.kz/files/media/yudi-svet-i-tma2020.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+       Концерт Ярослава Фридмана «Осенний саксофон»
+        🕗Время проведения: 15 ноября - сб 17:30
+        🏢Место проведения: г. Алматы, Театр La Boheme
+        👤Возрастное ограничение: 12+
+        [https://ticketon.kz/media/upload/20663u30705_kontsert-yaroslava-fridmana-osenniy-saksofon.jpg](URL)""",
+                         parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Творческий вечер с Марселем", callback_data='first')
+        key_second = types.InlineKeyboardButton("Зовите меня Джордж", callback_data='second')
+        key_third = types.InlineKeyboardButton("Юди «Свет и Тьма»", callback_data='third')
+        key_forth = types.InlineKeyboardButton("Концерт Ярослава Фридмана «Осенний саксофон»", callback_data='forth')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        key.row(key_forth)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Алматы" and date == "2020" and year == "Декабрь":
+        bot.send_message(message.from_user.id, """\r
+        Браво,Лауренсия!
+        🕗Время проведения: 5 декабря - сб 18:00
+        🏢Место проведения: Государственный академический русский театр для детей и юношества им. САЦ
+        Ул. Шаляпина 22 , уг. Алтынсарина.
+        💵Цены на билеты: 3 000
+
+        [https://zakazbiletov.kz/media/events/ge/1605245937mmwt6_238x318.png](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Metal - группа RAGE
+        🕗Время проведения: 11 декабря - пт 20:00
+        🏢Место проведения: Алматы қ., Республика сарайы
+        👤Возрастное ограничение: 16+
+
+        [https://ticketon.kz/files/media/vpervye-v-kazakhstane-kontsert-legendarnoy-metal--gruppy-rage-new.jpg](URL)""",
+                         parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Алдар Косе
+        🕗Время проведения: 16 декабря - ср 12:00
+        🏢Место проведения: Государственный академический русский театр для детей и юношества им. САЦ
+        Ул. Шаляпина 22 , уг. Алтынсарина.
+        💵Цены на билеты: 1 500
+
+        [https://zakazbiletov.kz/media/events/10/1605249748vbn39_238x318.png](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Группа «Нервы»
+        🕗Время проведения: 17 декабря - чт 19:00
+        🏢Место проведения: г. Алматы, Grand Park, ул. Кабдолова, 1/4
+        👤Возрастное ограничение: 12+
+
+        [https://ticketon.kz/files/media/gruppa-nervy-almaty121920.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Ирэна Аравина и Big Band
+        🕗Время проведения: 21 декабря - пн 17:30 
+        🏢Место проведения: Государственный академический русский театр драмы им. М.Ю. Лермонтова. Пр. Абая, 43.
+        💵Цены на билеты: 5 700 - 9 700
+
+        [https://zakazbiletov.kz/media/events/l0/1605075182cvh4f_238x318.png](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Браво,Лауренсия!", callback_data='first')
+        key_second = types.InlineKeyboardButton("Metal - группа RAGE", callback_data='second')
+        key_third = types.InlineKeyboardButton("Алдар Косе»", callback_data='third')
+        key_forth = types.InlineKeyboardButton("Группа «Нервы»", callback_data='forth')
+        key_fifth = types.InlineKeyboardButton("Ирэна Аравина и Big Band", callback_data='fifth')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        key.row(key_forth)
+        key.row(key_fifth)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Алматы" and date == "2021" and year == "Январь":
+        bot.send_message(message.from_user.id, """\r
+        Король и Шут
+        🕗Время проведения: 29 января - пт 19:00
+        🏢Место проведения: г. Алматы, Дворец Студентов
+        👤Возрастное ограничение: 16+
+
+        [https://ticketon.kz/files/media/korol-i-shut-v-almaty2021.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Король и Шут", callback_data='first')
+        key.row(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Алматы" and date == "2021" and year == "Февраль":
+        bot.send_message(message.from_user.id, """\r
+         «Кармен-сюита»
+        🕗Время проведения: 23 февраля - вт 19:00
+        🏢Место проведения: ГАТОБ имени Абая
+        👤Возрастное ограничение: 6+
+
+        [https://ticketon.kz/files/media/23-2402-500-700_karmen.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton('«Кармен-сюита»', callback_data='first')
+        key.row(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Алматы" and date == "2021" and year == "Март":
+        bot.send_message(message.from_user.id, """\r
+        Спектакль «Шальные деньги»
+        🕗Время проведения: 3 марта - ср 19:00
+        🏢Место проведения: Театр им. М. Лермонтова
+        👤Возрастное ограничение: 16+
+
+        [https://ticketon.kz/files/media/20621u52887_spektakl-shalnye-dengi2021.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        OBLADAET
+        🕗Время проведения: 6 марта - сб 19:00
+        🏢Место проведения: Клуб Жесть
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: 5 500
+
+        [https://ticketon.kz/files/images/obladaet02454657.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        «Ballet Globe Gala»
+        🕗Время проведения: 7 марта - вс 19:00
+        🏢Место проведения: ГАТОБ имени Абая
+        👤Возрастное ограничение: 6+
+
+        [https://ticketon.kz/files/media/0703-500-700_gala.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Гоголь. Шнитке. "Мертвые души"
+        🕗Время проведения: 13 марта 2021 - сб 19:00
+        🏢Место проведения: Казахская Государственная Филармония им. Жамбыла ул. Калдаякова, 35
+        💵Цены на билеты: 14 400 - 32 000
+
+        [https://zakazbiletov.kz/media/events/i1/1601962350xf44p_238x318.jpeg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        JONY, ELMAN, ANDRO
+        🕗Время проведения: 20 марта 2021 - сб 20:00
+        🏢Место проведения: Almaty Arena, Алгабас 1-й микрорайон, Алматы Арена
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: 6 000 - 15 000
+
+        [https://zakazbiletov.kz/media/events/ji/15991194838zc82_238x318.jpeg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        JEEMBO
+        🕗Время проведения: 27 марта - сб 19:00
+        🏢Место проведения: г. Алматы, клуб «Жесть»
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: 5 500
+
+        [https://ticketon.kz/files/media/19821u52689_jeboo-almaty-afisha.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Мухтар Хордаев
+        🕗Время проведения: 27 марта - сб 19:00
+        🏢Место проведения: г. Алматы, Дворец Республики
+        💵Цены на билеты: 7 000
+
+        [https://zakazbiletov.kz/media/events/6o/1580526534560zi_238x318.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Спектакль «Шальные деньги»", callback_data='first')
+        key_second = types.InlineKeyboardButton("OBLADAET", callback_data='second')
+        key_third = types.InlineKeyboardButton("«Ballet Globe Gala»»", callback_data='third')
+        key_forth = types.InlineKeyboardButton("Гоголь. Шнитке. Мертвые души", callback_data='forth')
+        key_fifth = types.InlineKeyboardButton("JONY, ELMAN, ANDRO", callback_data='fifth')
+        key_sixth = types.InlineKeyboardButton("JEEMBO", callback_data='sixth')
+        key_seventh = types.InlineKeyboardButton("Мухтар Хордаев", callback_data='seventh')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        key.row(key_forth)
+        key.row(key_fifth)
+        key.row(key_sixth)
+        key.row(key_seventh)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Алматы" and date == "2021" and year == "Апрель":
+        bot.send_message(message.from_user.id, """\r
+        Almaty Symphony Orchestra "КРЕЙЦЕРОВА СОНАТА"
+        🕗Время проведения: 1 апреля - чт 19:00
+        🏢Место проведения: Казахская Государственная Филармония им. Жамбыла, ул. Калдаякова, 35
+        💵Цены на билеты: 5000-10000
+
+        [https://zakazbiletov.kz/media/events/ux/1583420755ffpof_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Группа "Пикник"
+        🕗Время проведения: 3 апреля - сб 19:00
+        🏢Место проведения: Дворец студентов им. У. Жолдасбекова, ул. Тимирязева, 46
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: 7 000 - 30 000
+
+        [https://zakazbiletov.kz/media/events/0w/1604722200ur4bw_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        «Лебединое озеро»
+        🕗Время проведения: 10 апреля - сб 19:00
+        🏢Место проведения: г. Алматы, ГАТОБ имени Абая
+        👤Возрастное ограничение: 6+
+        💵Цены на билеты: от 10 000
+
+        [https://ticketon.kz/files/media/1004-1080-1920_swan.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Emin
+        🕗Время проведения: 11 апреля - вс 19:30
+        🏢Место проведения: Дворец Республики, пр. Достык, уг. пр. Абая
+        💵Цены на билеты: 8 000 - 50 000
+
+        [https://zakazbiletov.kz/media/events/1l/1601029647k7bnb_238x318.jpeg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Спектакль «Судьба в подарок»
+        🕗Время проведения: 13 апреля - вт 20:00
+        🏢Место проведения: Театр им. М. Лермонтова
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: от 11 000
+
+        [https://ticketon.kz/files/media/13-april-sudba-v-podarok.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Alizbar. Сказки вне времени. Концерт Арфотерапия
+        🕗Время проведения: 13 апреля - вт 19:00
+        🏢Место проведения: Казахский Государственный академический оркестр народных инструментов им. Курманга
+        пр. Абылай хана, 83
+        💵Цены на билеты: 5 500 - 10 000
+
+        [https://zakazbiletov.kz/media/events/s3/1592972922a9czl_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Максим Аверин
+        🕗Время проведения: 14 апреля 2021 - ср 19:00
+        🏢Место проведения: Казахский государственный академический театр драмы им. М. Ауэзова.Пр.Абая, 103,
+        уг. Байзакова
+        👤Возрастное ограничение: 12+
+        💵Цены на билеты: 11 200 - 24 000
+
+        [https://zakazbiletov.kz/media/events/26/15989430806qnug_238x318.jpeg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        LOQIEMEAN
+        🕗Время проведения: 16 апреля - пт 19:00
+        🏢Место проведения: г. Алматы
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: от 4 500
+
+        [https://ticketon.kz/files/media/loqiemean-v-almaty500x700.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Стендап Вани Усовича
+        🕗Время проведения: 16 апреля - пт 19:00
+        🏢Место проведения: ул. Байзакова 280, бизнес центр Almaty Towers, Transforma
+        👤Возрастное ограничение: 18+
+        💵Цены на билеты: 7 000
+
+        [https://ticketon.kz/files/media/stendap-vani-usovicha-13112020.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Комедия "Последний Шанс"
+        🕗Время проведения: 30 апреля 2021 - пт 19:30
+        🏢Место проведения: Государственный академический русский театр для детей и юношества им. САЦ
+        Ул. Шаляпина 22 , уг. Алтынсарина.
+        👤Возрастное ограничение: 12+
+        💵Цены на билеты: 8 000 - 27 000
+
+        [https://zakazbiletov.kz/media/events/7m/1604644806v2emd_238x318.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Almaty Symphony Orchestra КРЕЙЦЕРОВА СОНАТА", callback_data='first')
+        key_second = types.InlineKeyboardButton("Группа 'Пикник'", callback_data='second')
+        key_third = types.InlineKeyboardButton("«Лебединое озеро»", callback_data='third')
+        key_forth = types.InlineKeyboardButton("Emin", callback_data='forth')
+        key_fifth = types.InlineKeyboardButton("Спектакль «Судьба в подарок»", callback_data='fifth')
+        key_sixth = types.InlineKeyboardButton("Alizbar. Сказки вне времени. Концерт Арфотерапия",
+                                               callback_data='sixth')
+        key_seventh = types.InlineKeyboardButton("Максим Аверин", callback_data='seventh')
+        key_eight = types.InlineKeyboardButton("LOQIEMEAN", callback_data='eight')
+        key_nine = types.InlineKeyboardButton("Стендап Вани Усовича", callback_data='nine')
+        key_ten = types.InlineKeyboardButton("Комедия 'Последний Шанс'", callback_data='ten')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        key.row(key_forth)
+        key.row(key_fifth)
+        key.row(key_sixth)
+        key.row(key_seventh)
+        key.row(key_eight)
+        key.row(key_nine)
+        key.row(key_ten)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Алматы" and date == "2021" and year == "Май":
+        bot.send_message(message.from_user.id, """\r
+        ANIVAR
+        🕗Время проведения: 2 мая - вс 19:30
+        🏢Место проведения: г. Алматы, Дворец Республики
+        💵Цены на билеты: от 5 000
+
+        [https://ticketon.kz/files/media/anivar-v-almaty170420.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Дина Рубина
+        🕗Время проведения: 15 мая - сб 19:00
+        🏢Место проведения: г. Алматы, ул. Калдаякова 35, Филармония им. Жамбыла 
+        👤Возрастное ограничение: 12+
+        💵Цены на билеты: от 3 500
+
+        [https://ticketon.kz/files/media/img-ticketon-101920567164928.jpeg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Скриптонит
+        🕗Время проведения: 22 мая - сб 20:00
+        🏢Место проведения: Balýan Sholaq sport saraıy, Абая 44, уг Байтурсынова
+        💵Цены на билеты: 8 000 - 23 000
+
+        [https://zakazbiletov.kz/media/events/c0/1601992921lee43.png](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Любовь Успенская
+        🕗Время проведения: 29 мая - сб 19:00
+        🏢Место проведения: г. Алматы
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: от 9 000
+
+        [https://ticketon.kz/files/media/1004-1080-1920_swan.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("ANIVAR", callback_data='first')
+        key_second = types.InlineKeyboardButton("Дина Рубина", callback_data='second')
+        key_third = types.InlineKeyboardButton("Скриптонит", callback_data='third')
+        key_forth = types.InlineKeyboardButton("Любовь Успенская", callback_data='forth')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        key.row(key_forth)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Нур-Султан" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+        Премьера балета «Триумф»
+        🕗Время проведения: 20 ноября - пт 19:30
+        🏢Место проведения: Astana Ballet
+        💵Цены на билеты: от 2 000
+
+        [https://ticketon.kz/files/images/4254365546756786.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Messa di Gloria
+        🕗Время проведения: 21 ноября - сб 18:00
+        🏢Место проведения: Astana Opera
+        💵Цены на билеты: от 5 000
+
+        [https://ticketon.kz/media/upload/923793_gor.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Братья Гримм
+        🕗Время проведения: 24 ноября - вт 19:00
+        🏢Место проведения: г. Нур-Султан, ул. Желтоксан, 11, Театр им. Горького (малый зал)
+        👤Возрастное ограничение: 12+
+        💵Цены на билеты: от 1 000
+
+        [https://ticketon.kz/media/upload/20843u52887_bratya-grimm202013.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Приношение Бетховену
+        🕗Время проведения: 25 ноября - ср 19:00
+        🏢Место проведения: Astana Opera
+        👤Возрастное ограничение: 65+
+        💵Цены на билеты: от 2 000
+
+        [https://ticketon.kz/media/upload/710760_25-11-2020-prinosenie-bethovenu2.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Премьера балета «Триумф»", callback_data='first')
+        key_second = types.InlineKeyboardButton("Messa di Gloria", callback_data='second')
+        key_third = types.InlineKeyboardButton("Братья Гримм", callback_data='third')
+        key_forth = types.InlineKeyboardButton("Приношение Бетховену", callback_data='forth')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        key.row(key_forth)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Нур-Султан" and date == "2020" and year == "Декабрь":
+        bot.send_message(message.from_user.id, """\r
+        Группа «Нервы» 
+        🕗Время проведения: 20 декабря - вс 19:00
+        🏢Место проведения: г. Нур-Султан, Бар «The Bus», Кургальжинское шоссе, №3Б.
+        👤Возрастное ограничение: 12+
+        💵Цены на билеты: от 10 000
+
+        [https://ticketon.kz/files/media/gruppa-nervy-nur-sultan201220.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Группа «Нервы»", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Нур-Султан" and date == "2021" and year == "Март":
+        bot.send_message(message.from_user.id, """\r
+        Мастер и Маргарита 
+        🕗Время проведения: 8 марта - пн 19:00
+        🏢Место проведения: г. Нур-Султан, пр. Мангилик Ел, №B2.3, Nomad City Hall
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: от 6 000
+
+        [https://ticketon.kz/files/media/mastermargarita14072020.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        OBLADAET
+        🕗Время проведения: 9 марта - вт 19:00
+        🏢Место проведения: The BUS music-pub
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: от 5 500
+
+        [https://ticketon.kz/files/images/obladaet-nur-sultan-43443.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        JONY, ELMAN, ANDRO
+        🕗Время проведения: 13 марта - сб 19:00
+        🏢Место проведения: Конгресс-Центр
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: 9 000 - 15 000
+
+        [https://zakazbiletov.kz/media/events/lo/15991193115dtfm_238x318.jpeg](URL)""", parse_mode="Markdown")
+
+        bot.send_message(message.from_user.id, """\r
+        JEEMBO
+        🕗Время проведения: 29 марта - пн 19:00
+        🏢Место проведения: г. Нур-Султан, Music Pub «The Bus»
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: от 5 500
+
+        [https://ticketon.kz/files/media/jeboo-astana-afisha-1.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Мастер и Маргарита", callback_data='first')
+        key_second = types.InlineKeyboardButton("OBLADAET", callback_data='second')
+        key_third = types.InlineKeyboardButton("JONY, ELMAN, ANDRO", callback_data='third')
+        key_forth = types.InlineKeyboardButton("JEEMBO", callback_data='forth')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        key.row(key_forth)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Нур-Султан" and date == "2021" and year == "Апрель":
+        bot.send_message(message.from_user.id, """\r
+        Дельфин
+        🕗Время проведения: 3 апреля - сб 20:00
+        🏢Место проведения: The Bus Club
+        💵Цены на билеты: 8 500
+
+        [https://zakazbiletov.kz/media/events/tc/1602477007n4n67_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Emin
+        🕗Время проведения: 10 апреля - сб 19:00
+        🏢Место проведения: ЦКЗ "Казахстан"
+        💵Цены на билеты: 5000-46000
+
+        [https://zakazbiletov.kz/media/events/1x/16010296317sx6a_238x318.jpeg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Легенды Арфы
+        🕗Время проведения: 12 апреля - пн 19:00
+        🏢Место проведения: Nomad City Hall
+        💵Цены на билеты: 4 500 - 7 500
+
+        [https://zakazbiletov.kz/media/events/3l/1596698426gfrqu_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Максим Аверин
+        🕗Время проведения: 15 апреля - чт 19:00
+        🏢Место проведения: Казмедиа центр, Д. Конаева, 4
+        👤Возрастное ограничение: 12+
+        💵Цены на билеты: 7 000 - 22 000
+
+        [https://zakazbiletov.kz/media/events/3s/1598942806ae6td_238x318.jpeg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Скриптонит
+        🕗Время проведения: 17 апреля - сб 19:00
+        🏢Место проведения: Конгресс-Центр
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: 9 500 - 23 000
+
+        [https://zakazbiletov.kz/media/events/9z/15983513519jihc_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Стендап Вани Усовича
+        🕗Время проведения: 17 апреля - сб 20:00
+        🏢Место проведения: г. Нур-Султан, The Bus
+        👤Возрастное ограничение: 18+
+        💵Цены на билеты: 7 000
+
+        [https://ticketon.kz/files/media/stendap-vani-usovicha-v-nur-sultane-new.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        LOQIEMEAN
+        🕗Время проведения: 18 апреля - вс 19:00
+        🏢Место проведения: г. Нур-Султан, The Bus
+        👤Возрастное ограничение: 16+
+        💵Цены на билеты: от 4 500
+
+        [https://ticketon.kz/files/media/loqiemean-v-nur-sultane20211404.jpg](URL)""",
+                         parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Дельфин", callback_data='first')
+        key_second = types.InlineKeyboardButton("Emin", callback_data='second')
+        key_third = types.InlineKeyboardButton("Легенды Арфы", callback_data='third')
+        key_forth = types.InlineKeyboardButton("Максим Аверин", callback_data='forth')
+        key_fifth = types.InlineKeyboardButton("Скриптонит", callback_data='fifth')
+        key_sixth = types.InlineKeyboardButton("Стендап Вани Усовича", callback_data='sixth')
+        key_seventh = types.InlineKeyboardButton("LOQIEMEAN", callback_data='seventh')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        key.row(key_forth)
+        key.row(key_fifth)
+        key.row(key_sixth)
+        key.row(key_seventh)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Нур-Султан" and date == "2021" and year == "Май":
+        bot.send_message(message.from_user.id, """\r
+        Anivar
+        🕗Время проведения: 1 мая - сб 19:30
+        🏢Место проведения: ЦКЗ "Казахстан"
+        💵Цены на билеты: 5000-20000
+
+        [https://zakazbiletov.kz/media/events/bd/1584606201jcklj_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Boulevard Depo
+        🕗Время проведения: 16 мая - вс 19:00
+        🏢Место проведения: г. Нур-Султан, Бар «The Bus»
+        💵Цены на билеты: 7 000
+
+        [https://ticketon.kz/files/media/nursultan_vertikal.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Любовь Успенская
+        🕗Время проведения: 30 мая - вс 19:00
+        🏢Место проведения: ЦКЗ "Казахстан"
+        💵Цены на билеты: 6 000 - 40 000
+
+        [https://zakazbiletov.kz/media/events/xd/1584606040384q0_238x318.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Anivar", callback_data='first')
+        key_second = types.InlineKeyboardButton("Boulevard Depo", callback_data='second')
+        key_third = types.InlineKeyboardButton("Любовь Успенская", callback_data='third')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Актобе" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+        Шинель
+    🕗Время проведения: 21 ноября - c, 19:00
+    🏢Место проведения: г. Актобе, проспект Мира, 17, театр Алакай
+    💵Цены на билеты: от 500
+
+    [https://ticketon.kz/files/media/20499u52887_shinel77.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        «Забыть Герострата»
+    🕗Время проведения: 25 ноября - ср 19:00
+    🏢Место проведения: г. Актобе, ул.Т. Ахтанова, 52, Театр драмы им. Ахтанова
+    💵Цены на билеты: от 1000
+
+    [https://ticketon.kz/files/media/zabyt-gerostrata-teatr-akhtanova.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Шинель", callback_data='first')
+        key_second = types.InlineKeyboardButton("«Забыть Герострата»", callback_data='second')
+        key.add(key_first, key_second)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Караганда" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+        FEDRA. ИГРА
+    🕗Время проведения: 19 ноября - чт 17:00
+    🏢Место проведения: г. Караганда, пр. Н. Назарбаева, 19/1, Театр им. Станиславского
+    💵Цены на билеты: от 1 200
+
+    [https://ticketon.kz/files/media/7891u15171_premera-fedra-igra.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Достоевский FM: Хроники Мордасова
+    🕗Время проведения: 20 ноября - пт 17:00
+    🏢Место проведения: г. Караганда, пр. Н. Назарбаева, 19/1, Театр им. Станиславского
+    💵Цены на билеты: от 1 200
+
+    [https://ticketon.kz/files/media/dostaevskii-teatr-stanislavskogo.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Мамаша Кураж
+    🕗Время проведения: 27 ноября - пт 17:00
+    🏢Место проведения: г. Караганда, пр. Н. Назарбаева, 19/1, Театр им. Станиславского
+    💵Цены на билеты: от 1 200
+
+    [https://ticketon.kz/files/media/11552u30705_mamawa-kurazh.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("FEDRA. ИГРА", callback_data='first')
+        key_second = types.InlineKeyboardButton(" Достоевский FM: Хроники Мордасова", callback_data='second')
+        key_third = types.InlineKeyboardButton("Мамаша Кураж", callback_data='third')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Караганда" and date == "2020" and year == "Декабрь":
+        bot.send_message(message.from_user.id, """\r
+        Группа «Нервы»
+     🕗Время проведения: 19 декабря - сб 19:00
+     🏢Место проведения: г. Караганды, Клуб «5 УГОЛ», ул. Беллорусская, №1.
+     👤Возрастное ограничение: 12+
+     💵Цены на билеты: от 10 000
+
+     [https://ticketon.kz/files/media/gruppa-nervy-karaganda191220.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Группа «Нервы»", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Караганда" and date == "2021" and year == "Март":
+        bot.send_message(message.from_user.id, """\r
+        JONY, ELMAN, ANDRO
+    🕗Время проведения: 12 марта - пт 19:00
+    🏢Место проведения: Спорткомплекс "Жастар"
+    👤Возрастное ограничение: 16+
+    💵Цены на билеты: 7 000 - 10 000
+
+    [https://zakazbiletov.kz/media/events/ra/15991192445uctw_238x318.jpeg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("JONY, ELMAN, ANDRO", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Караганда" and date == "2021" and year == "Апрель":
+        bot.send_message(message.from_user.id, """\r
+        Пикник
+    🕗Время проведения: 2 апреля - пт 19:00
+    🏢Место проведения: Театр им. Сейфуллина, просп. Бухар-Жырау 25
+    💵Цены на билеты: 12 000 - 25 000
+
+    [https://zakazbiletov.kz/media/events/f6/1604722235zsj5w_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Фактор - 2 
+    🕗Время проведения: 24 апреля - сб 19:00
+    🏢Место проведения: Центр Бокса им. С. Сапиева, Республика даңғылы 11/3
+    💵Цены на билеты: 5 000 - 10 000
+
+    [https://zakazbiletov.kz/media/events/7z/159953804053tdj_238x318.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Пикник", callback_data='first')
+        key_second = types.InlineKeyboardButton(" Фактор - 2 ", callback_data='second')
+        key.row(key_first)
+        key.row(key_second)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Костанай" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+        Өкініш
+    🕗Время проведения: 27 ноября - пт 18:30
+    🏢Место проведения: Ілияс Омаров драма театр
+    💵Цены на билеты: 600
+
+    [https://ticketon.kz/files/media/okinish-kazteatr-kostanay2021.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Маленькая фея
+    🕗Время проведения: 28 ноября - сб 12:00
+    🏢Место проведения: г. Костанай, ул. Перронная, 20, Областной кукольный театр
+    💵Цены на билеты: 500
+
+    [https://ticketon.kz/files/media/20523u52887_malenkaya-feya0078.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Өкініш", callback_data='first')
+        key_second = types.InlineKeyboardButton("Маленькая фея", callback_data='second')
+        key.row(key_first)
+        key.row(key_second)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Кызылорда" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+        Нашақор жайлы новелла
+    🕗Время проведения: 19 ноября - чт 17:00
+    🏢Место проведения: Н.Бекежанов драма театр
+    💵Цены на билеты: 1000
+
+    [https://ticketon.kz/media/upload/20759u52887_nashaor-zhayly-novella202145.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Пай-пай жас жұбайлар-ай
+    🕗Время проведения: 24 ноября - вт 17:00
+    🏢Место проведения: Н.Бекежанов драма театр
+    💵Цены на билеты: 500
+
+    [https://ticketon.kz/media/upload/20757u52887_pay-pay-zhas-zhubaylar-ay-bekejanona202145.jpg](URL)""",
+                         parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        «Абылайханның арманы»
+    🕗Время проведения: 30 ноября - пн 17:00
+    🏢Место проведения: Н.Бекежанов драма театр
+    💵Цены на билеты: 1000
+
+    [https://ticketon.kz/media/upload/20765u52887_abylaykhanny-armany201245.jpg](URL)""",
+                         parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Нашақор жайлы новелла", callback_data='first')
+        key_second = types.InlineKeyboardButton("Пай-пай жас жұбайлар-ай", callback_data='second')
+        key_third = types.InlineKeyboardButton("«Абылайханның арманы»", callback_data='third')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Павлодар" and date == "2021" and year == "Март":
+        bot.send_message(message.from_user.id, """\r
+        JONY, ELMAN, ANDRO
+    🕗Время проведения: 14 марта - вс 19:00
+    🏢Место проведения: Ice Arena, ТРЦ "Batyr Mall"
+    💵Цены на билеты: 7 000 - 10 000
+
+    [https://zakazbiletov.kz/media/events/az/1599119358wvvjz.jpeg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("JONY, ELMAN, ANDRO", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Павлодар" and date == "2021" and year == "Апрель":
+        bot.send_message(message.from_user.id, """\r
+        Фактор - 2
+    🕗Время проведения: 23 апреля 2021 - пт 19:00
+    🏢Место проведения: Ice Arena, ТРЦ "Batyr Mall"
+    💵Цены на билеты: 5 000 - 10 000
+
+    [https://zakazbiletov.kz/media/events/yd/16032648030zq3l_238x318.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Фактор - 2", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Семей" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+        «Ойыншықтар»
+    🕗Время проведения: 22 ноября - вс 11:00
+    🏢Место проведения: г. Семей, Абай Арена
+    💵Цены на билеты: от 600
+
+    [https://ticketon.kz/media/upload/20533u30705_oyynshyktar-semey_2.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+         «Ящерица»
+    🕗Время проведения: 22 ноября - вс 17:00
+    🏢Место проведения: г. Семей, Театр им. Достоевского
+    💵Цены на билеты: 800
+
+     [https://ticketon.kz/files/media/20423u52407_yasherica.jpg](URL)""",
+                         parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+         «Слова назидания»
+    🕗Время проведения: 28 ноября - сб 17:00
+    🏢Место проведения: г. Семей, Абай Арена
+    💵Цены на билеты: от 800
+
+    [https://ticketon.kz/files/media/poeticheskiy-spektakl-slova-nazidaniya-new.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("«Ойыншықтар»", callback_data='first')
+        key_second = types.InlineKeyboardButton("«Ящерица»", callback_data='second')
+        key_third = types.InlineKeyboardButton(" «Слова назидания»", callback_data='third')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Семей" and date == "2021" and year == "Март":
+        bot.send_message(message.from_user.id, """\r
+        JONY, ELMAN, ANDRO
+    🕗Время проведения: 16 марта - вт 19:00
+    🏢Место проведения: Культурно-спортивный комплекс "Арена", жилой район Карагайлы 39
+    💵Цены на билеты: 4 000 - 10 000
+
+    [https://zakazbiletov.kz/media/events/7b/1595227459k0jkb_238x318.jpeg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("JONY, ELMAN, ANDRO", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Семей" and date == "2021" and year == "Апрель":
+        bot.send_message(message.from_user.id, """\r
+        Фактор - 2
+    🕗Время проведения: 21 апреля - ср 19:00
+    🏢Место проведения: г. Семей, Абай Арена
+    💵Цены на билеты: 5 000 - 10 000
+
+    [https://ticketon.kz/media/upload/19369u30239_faktor-2-v-semee2021.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Фактор - 2", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Темиртау" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+        «Красная шапочка»
+    🕗Время проведения: 21 ноября - сб 12:00
+    🏢Место проведения: г. Темиртау, пр.Республики, 136, Темиртауский театр для детей и юношества
+    💵Цены на билеты: от 400
+
+    [https://ticketon.kz/media/upload/18435u30239_krasnaya-shapochka-tyuz-temirtau.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        «Провинциальные анекдоты»
+    🕗Время проведения: 21 ноября - сб 18:30
+    🏢Место проведения: г. Темиртау, пр.Республики, 136, Темиртауский театр для детей и юношества
+    💵Цены на билеты: 1000
+
+    [https://ticketon.kz/media/upload/14225u30705_provintsialnye-anekdoty-tyuz-temirtau.jpg](URL)""",
+                         parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        «Обломов»
+    🕗Время проведения: 22 ноября - вс 18:30
+    🏢Место проведения: г. Темиртау, пр.Республики, 136, Темиртауский театр для детей и юношества
+    💵Цены на билеты: 1000
+
+    [https://ticketon.kz/files/media/f.kjlhghg.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("«Красная шапочка»", callback_data='first')
+        key_second = types.InlineKeyboardButton("«Провинциальные анекдоты»", callback_data='second')
+        key_third = types.InlineKeyboardButton(" «Обломов»", callback_data='third')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Усть-Каменогорск" and date == "2021" and year == "Март":
+        bot.send_message(message.from_user.id, """\r
+        JONY, ELMAN, ANDRO
+    🕗Время проведения: 18 марта - чт 19:00
+    🏢Место проведения: Дворец Спорта им. Б. Александрова
+    💵Цены на билеты: 7 000 - 10 000
+
+    [https://zakazbiletov.kz/media/events/81/15991194417j2dd_238x318.jpeg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Алиса в зазеркалье на льду
+    🕗Время проведения: 20 марта - сб 12:00
+    🏢Место проведения: Дворец Спорта им. Б. Александрова
+    💵Цены на билеты: 3 000 - 10 000
+
+    [https://zakazbiletov.kz/media/events/pc/1586235363y7qi7_238x318.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+         Ледовый мюзикл "Дракула. история вечной любви"
+    🕗Время проведения: 20 марта- сб 19:00
+    🏢Место проведения: Дворец Спорта им. Б. Александрова
+    💵Цены на билеты: 3 000 - 10 000
+
+    [https://zakazbiletov.kz/media/events/sn/1586234724785am_238x318.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("JONY, ELMAN, ANDRO", callback_data='first')
+        key_second = types.InlineKeyboardButton("Алиса в зазеркалье на льду", callback_data='second')
+        key_third = types.InlineKeyboardButton("Ледовый мюзикл 'Дракула. история вечной любви'", callback_data='third')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Усть-Каменогорск" and date == "2021" and year == "Апрель":
+        bot.send_message(message.from_user.id, """\r
+        Фактор - 2
+    🕗Время проведения: 20 апреля - вт 19:00
+    🏢Место проведения: Дворец Спорта им. Б. Александрова
+    💵Цены на билеты: 5 000 - 8 000
+
+    [https://zakazbiletov.kz/media/events/yd/16032648030zq3l_238x318.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Фактор - 2", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Шымкент" and date == "2020" and year == "Ноябрь":
+        bot.send_message(message.from_user.id, """\r
+         Ханума
+    🕗Время проведения: 15 ноября - вс 19:00
+    🏢Место проведения: г. Шымкент,  пл. Аль-Фараби 4/2, Русский Драматический театр г. Шымкент
+    💵Цены на билеты: 1 200
+
+    [https://ticketon.kz/files/media/khanuma-yuko0021.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+       Слишком женатый таксист
+    🕗Время проведения: 21 ноября - сб 19:00
+    🏢Место проведения:  г. Шымкент,  пл. Аль-Фараби 4/2,  Русский Драматический Театр
+    💵Цены на билеты: от 1 200
+
+    [https://ticketon.kz/files/media/10300u30239_slishkom-zhenatyy-taksist.jpg](URL)""", parse_mode="Markdown")
+        bot.send_message(message.from_user.id, """\r
+        Танакөз
+    🕗Время проведения: 27 ноября - пт 18:30
+    🏢Место проведения: Шымкент қ-сы, Нұрсұлтан Назарбаев даңғылы, 6, Ж.Шанин атындағы театр
+    💵Цены на билеты: 1 200
+
+    [https://ticketon.kz/files/media/premera-tanakoz2089.jpg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("Ханума", callback_data='first')
+        key_second = types.InlineKeyboardButton("Слишком женатый таксист", callback_data='second')
+        key_third = types.InlineKeyboardButton("Танакөз", callback_data='third')
+        key.row(key_first)
+        key.row(key_second)
+        key.row(key_third)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    elif month == "Шымкент" and date == "2021" and year == "Март":
+        bot.send_message(message.from_user.id, """\r
+        JONY, ELMAN, ANDRO
+    🕗Время проведения: 21 марта 2021 - вс 19:00
+    🏢Место проведения: Легкоатлетический манеж, Казиева, 2а
+    💵Цены на билеты: 5 000 - 8 000
+
+    [https://zakazbiletov.kz/media/events/86/15991195262zp2k_238x318.jpeg](URL)""", parse_mode="Markdown")
+        key = types.InlineKeyboardMarkup()
+        key_first = types.InlineKeyboardButton("JONY, ELMAN, ANDRO", callback_data='first')
+        key.add(key_first)
+        bot.send_message(message.chat.id, 'Выберите мероприятие из списка:', reply_markup=key)
+    else:
+        bot.send_message(message.from_user.id, "По вашему запросу ничего не найдено.")
+        bot.send_message(message.chat.id, "Попробуем еще раз!")
+        bot.send_message(message.chat.id, "Привет! Вы хотите ознакомиться с афишей мероприятий?")
+        bot.register_next_step_handler(message, reg_answer)
+
+
+bot.polling(none_stop=True)
